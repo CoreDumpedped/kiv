@@ -5,6 +5,7 @@
  */
 package kiviaaat;
 
+import java.awt.Point;
 import javax.swing.JComponent;
 
 /**
@@ -17,6 +18,8 @@ public class AxeComponent extends JComponent{
     private Integer longueur;
     //Distance entre le centre du Kiviatt et le début du trait
     private Integer distToCenter;
+    //Orientation du trait en degrés
+    private Integer orientation;
     
     //Valeurs contenues dans le modèle
     private String titre;
@@ -25,14 +28,13 @@ public class AxeComponent extends JComponent{
     private Integer value;
     
     //Coordonnées du centre du Kiviatt
-    private Integer x0;
-    private Integer y0;
+    private Point centre;
     
-    public AxeComponent(Integer x0, Integer y0, Integer longueur, Integer distToCenter, Object[] line){
-        this.x0 = x0;
-        this.y0 = y0;
+    public AxeComponent(Point centre, Integer longueur, Integer distToCenter, Integer orientation, Object[] line){
+        this.centre = centre;
         this.longueur = longueur;
         this.distToCenter = distToCenter;
+        this.orientation = orientation;
         this.titre = (String) line[0];
         this.value = (Integer) line[1];
         this.vMin = (Integer) line[2];

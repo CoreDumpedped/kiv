@@ -44,6 +44,7 @@ public class AxeComponent extends JComponent{
         this.value = (Integer) line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
+        repaint();
     }
     
     @Override

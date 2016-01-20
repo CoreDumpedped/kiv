@@ -22,28 +22,30 @@ public class Kiviaaat extends JComponent{
     private ArrayList<AxeComponent> listAxe;
     private static int DIST_CENTRE=5; 
             
-    public Kiviaaat(){ 
-        this(new DefaultTableModel(),new ArrayList<>());
+
+    public Kiviaaat(){
+        
     }
     
-    
-    public Kiviaaat(TableModel t,ArrayList<AxeComponent> l){
+    public Kiviaaat(TableModel t){
         this.model=t;
-        this.listAxe=l;
+        this.listAxe=createAxes();
     }
    
-    public Kiviaaat(TableModel t){
-        this(t,new ArrayList<AxeComponent>());
+    public void setModel(TableModel t){
+        this.model=t;
+        this.listAxe=createAxes();
+        this.repaint();
     }
-    
     /**
      * crée les différents axes en fonction du model de données
+     * return une liste axes en fonction du model
      */
-    public void createAxes(){
+    public ArrayList<AxeComponent> createAxes(){
        int i;
        int orientation=0;       
        int angle=360/model.getRowCount();
-      
+      ArrayList<AxeComponent> liste =new ArrayList<AxeComponent>();
        for(i=0;i<model.getRowCount();i++){
            Point p=new Point();
            int l=this.calculeLongueur();
@@ -51,9 +53,22 @@ public class Kiviaaat extends JComponent{
            p.y=this.getSize().width/2;
            Object[] line=RowToObject(i);    
            AxeComponent a=new AxeComponent(p,l,DIST_CENTRE, orientation, line);
-           listAxe.add(a);
+           liste.add(a);
            orientation+=angle;        
        }
+       return liste;
+    }
+    
+
+    public void repaint(){
+      if(listAxe==null){
+          return;
+      }
+       
+        for(AxeComponent axe:listAxe){
+          //   System.out.println("repaint");
+            axe.repaint();
+        }
     }
     
     /**

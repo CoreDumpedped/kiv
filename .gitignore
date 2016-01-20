@@ -1,1 +1,16 @@
+<<<<<<< HEAD
 /kiviat/nbproject/private/
+=======
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+>>>>>>> 248879375e48d83fe292ec3ba1da0e0d5705ce35

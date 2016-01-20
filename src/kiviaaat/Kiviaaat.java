@@ -25,7 +25,8 @@ public class Kiviaaat extends JLayeredPane{
             
 
     public Kiviaaat(){
-        
+     model=null;
+     this.listAxe=new ArrayList<>();
     }
     
     public Kiviaaat(TableModel t){
@@ -96,6 +97,14 @@ public class Kiviaaat extends JLayeredPane{
     @Override
     public void paint(Graphics g) {
         super.paint(g);        
+    }
+    
+    @Override
+    public void setBounds(int x, int y, int w, int h) {
+        super.setBounds(x,y,w,h);      
+        for(AxeComponent a:listAxe){
+            a.setBounds(0, 0, w, h);
+        }
     }
 
 }

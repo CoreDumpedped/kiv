@@ -35,6 +35,18 @@ public class AxeComponent extends JComponent{
     //Le rayon du curseur
     private Integer rayonCurseur = 3;
     
+    public AxeComponent(){
+        this.centre = new Point(50, 50);
+        this.longueur = 100;
+        this.distToCenter = 5;
+        this.orientation = 5;
+        this.titre = "titre";
+        this.value = 5;
+        this.vMin = 1;
+        this.vMax = 10;
+        
+    }
+    
     public AxeComponent(Point centre, Integer longueur, Integer distToCenter, Integer orientation, Object[] line){
         this.centre = centre;
         this.longueur = longueur;

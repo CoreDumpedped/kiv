@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JComponent;
+import javax.swing.JLayeredPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -16,7 +17,7 @@ import javax.swing.table.TableModel;
  *
  * @author deslanbe
  */
-public class Kiviaaat extends JComponent{
+public class Kiviaaat extends JLayeredPane{
  
     private TableModel model;
     private ArrayList<AxeComponent> listAxe;
@@ -53,6 +54,7 @@ public class Kiviaaat extends JComponent{
            p.y=this.getSize().width/2;
            Object[] line=RowToObject(i);    
            AxeComponent a=new AxeComponent(p,l,DIST_CENTRE, orientation, line);
+           this.add(a);
            liste.add(a);
            orientation+=angle;        
        }
@@ -60,16 +62,7 @@ public class Kiviaaat extends JComponent{
     }
     
 
-    public void repaint(){
-      if(listAxe==null){
-          return;
-      }
-       
-        for(AxeComponent axe:listAxe){
-          //   System.out.println("repaint");
-            axe.repaint();
-        }
-    }
+
     
     /**
      * transforme une ligne du tableModel en object[]

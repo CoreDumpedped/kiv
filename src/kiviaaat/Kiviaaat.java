@@ -6,7 +6,9 @@
 package kiviaaat;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 import javax.swing.JComponent;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -14,8 +16,20 @@ import javax.swing.table.TableModel;
  * @author deslanbe
  */
 public class Kiviaaat extends JComponent{
-
+ 
     private TableModel model;
+    private ArrayList<AxeComponent> listAxe;
+            
+    public Kiviaaat(){ 
+        this(new DefaultTableModel(),new ArrayList<>());
+    }
+    
+    
+    public Kiviaaat(TableModel t,ArrayList<AxeComponent> l){
+        this.model=t;
+        this.listAxe=l;
+    }
+   
     
     
     @Override

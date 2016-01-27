@@ -9,11 +9,14 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JComponent;
 
 /**
@@ -29,11 +32,20 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     //Orientation du trait en degrés
     private Integer orientation;
     
+    public String getTitre() {
+        return titre;
+    }
+
     //Valeurs contenues dans le modèle
+    public Integer getValue() {
+        return value;
+    }
     private String titre;
     private Integer vMax;
     private Integer vMin;
     private Integer value;
+    
+    private List<AxeListener> listeListener=new ArrayList<>();
     
     //Le centre du curseur
     private Point2D.Double centreCurseur;
@@ -48,6 +60,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     }
     
     public AxeComponent(Point centre, Integer longueur, Integer distToCenter, Integer orientation, Object[] line){
+        
         this.centre = centre;
         this.longueur = longueur;
         this.distToCenter = distToCenter;
@@ -72,7 +85,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         
     }
 
-    
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -159,4 +172,21 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         System.out.println(titre + " : Moved");
     }
     
-}
+    
+    public void addListener(AxeListener s){
+         listeListener.add(s);
+    }
+       /**
+        * notify des changement les observeur
+        */
+    public void firePropertyNotify(){
+       AxeEvent e= new AxeEvent(this);
+            for(AxeListener s: listeListener){
+                s.datachange(e);
+            } 
+        }
+
+    }
+    
+    
+

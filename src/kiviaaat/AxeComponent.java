@@ -74,7 +74,7 @@ public class AxeComponent extends JComponent{
         this.distToCenter = distToCenter;
         this.orientation = orientation;
         this.titre = (String) line[0];
-        this.value = (Integer) line[1];
+        this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
         repaint();
@@ -89,8 +89,8 @@ public class AxeComponent extends JComponent{
                 
         //La valeur de l'échelle en valeur/unité de longueur
         double echelle = ((double)vMax-(double)vMin)/(double)longueur;
-        System.out.println("vMax : " + vMax + ",vMin : " + vMin + ",l : " + longueur);
-        System.out.println("centre X : " + centre.x + "centre Y : " + centre.y);
+   //     System.out.println("vMax : " + vMax + ",vMin : " + vMin + ",l : " + longueur);
+   //     System.out.println("centre X : " + centre.x + "centre Y : " + centre.y);
         //L'angle du trait en radians
         double angle = Math.toRadians(orientation);
         
@@ -104,7 +104,7 @@ public class AxeComponent extends JComponent{
          xCurseur = (int) (centre.x + (distToCenter+(value-vMin)/echelle)*Math.cos(angle) - rayonCurseur);
          yCurseur = (int) (centre.y + (distToCenter+(value-vMin)/echelle)*Math.sin(angle) - rayonCurseur);
         
-        System.out.println("Trait orientation : " + orientation + ", echelle : " + echelle + ", xDepart=" + xDepart + ", yDepart=" + yDepart + ", xCurseur=" + xCurseur + ", yCurseur=" + yCurseur);
+   //     System.out.println("Trait orientation : " + orientation + ", echelle : " + echelle + ", xDepart=" + xDepart + ", yDepart=" + yDepart + ", xCurseur=" + xCurseur + ", yCurseur=" + yCurseur);
           
         //On trace le trait
         g2.setColor(Color.black);

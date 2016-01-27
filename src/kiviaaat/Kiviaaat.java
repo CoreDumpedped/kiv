@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JLayeredPane;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
 /**
@@ -29,24 +31,56 @@ public class Kiviaaat extends JLayeredPane{
     
     public Kiviaaat(TableModel t){
         this.model=t;
+         this.model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+              majTab(e);
+            }
+        });   
         createAxes();
     }
    
     public void setModel(TableModel t){
         this.model=t;
+        this.model.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+              majTab(e);
+            }
+        });   
         createAxes();
         this.repaint();
     }
+    
+    
+    /**
+     * réinitialise les axes et les recrée en fonction du model 
+     * @param e 
+     */
+    public void majTab(TableModelEvent e){
+        System.out.println("MAJ ");
+       this.removeAxe();
+        createAxes();
+        this.repaint();
+        System.out.println(listAxe.isEmpty());
+    }
+    
+    public void removeAxe(){
+        for(AxeComponent a:listAxe){
+            this.remove(a);
+        }
+    }
+    
     /**
      * crée les différents axes en fonction du model de données
-     * return une liste axes en fonction du model
+     * 
      */
     public void createAxes(){
         System.out.println("CreateAxes");
        int i;
        int orientation=0;       
        int angle=360/model.getRowCount();
-        ArrayList<AxeComponent> liste =new ArrayList<AxeComponent>();
+       listAxe =new ArrayList<AxeComponent>();
 
        for(i=0;i<model.getRowCount();i++){
            Point centre = new Point();
@@ -62,6 +96,11 @@ public class Kiviaaat extends JLayeredPane{
     }
     
    
+    
+    
+
+    
+    
     /**
      * transforme une ligne du tableModel en object[]
      * @param indice de la ligne
@@ -70,9 +109,17 @@ public class Kiviaaat extends JLayeredPane{
     public Object[] RowToObject(int indice){
            Object[] line=new Object[4];
            line[0]=model.getValueAt(indice,0);
-           line[1]=model.getValueAt(indice,1);
            line[2]=model.getValueAt(indice,2);
            line[3]=model.getValueAt(indice,3);
+                      if(model.getValueAt(indice,1) instanceof String){
+                   line[1]=Integer.parseInt((String) model.getValueAt(indice,1));
+           }else{
+                 line[1]=model.getValueAt(indice,1);
+           }
+           
+           
+           
+           
            return line;
     }
     
@@ -91,24 +138,32 @@ public class Kiviaaat extends JLayeredPane{
        
     @Override
     public void paint(Graphics g) {
+        System.err.println("PAINT");
         super.paint(g);    
+       this.drawPolyagon(g);
+    }
+    
+    
+    /**
+     * calcule et dessine le polygone
+     * qui relie les curseur entre eux
+     * @param g 
+     */
+    public void drawPolyagon(Graphics g){
         int i=0;
         int[] xPoints=new int[listAxe.size()];
         int[] yPoints=new int[listAxe.size()];
-        for(AxeComponent a:listAxe){
+        for(AxeComponent a:listAxe){ 
              xPoints[i]=a.getxCurseur();
              yPoints[i]=a.getyCurseur();
              i++;
         }
-       
-        g.drawPolygon(xPoints, yPoints, listAxe.size());
-        
+        g.drawPolygon(xPoints, yPoints, listAxe.size());     
     }
     
     @Override
     public void setBounds(int x, int y, int w, int h) {
         super.setBounds(x, y, w, h);
-        
         for (AxeComponent c : listAxe) {
             c.setBounds(0, 0, w, h);
         }

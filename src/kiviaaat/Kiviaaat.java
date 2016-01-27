@@ -5,6 +5,7 @@
  */
 package kiviaaat;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -170,9 +171,8 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
        
     @Override
     public void paint(Graphics g) {
-        System.err.println("PAINT");
-        super.paint(g);    
-       this.drawPolyagon(g);
+        this.drawPolyagon(g);
+        super.paint(g);           
     }
     
     
@@ -191,7 +191,10 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
              yPoints[i]= (int)a.getCentreCurseur().y;
              i++;
         }
-        g.drawPolygon(xPoints, yPoints, listAxe.size());     
+        g.setColor(Color.black);
+        g.drawPolygon(xPoints, yPoints, listAxe.size());          
+        g.setColor(new Color((float) 0.5, 0, (float) 0.2, (float) 0.1));
+        g.fillPolygon(xPoints, yPoints, listAxe.size());     
     }
     
     @Override

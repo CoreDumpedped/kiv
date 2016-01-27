@@ -56,7 +56,16 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     //Le rayon du curseur
     private Integer rayonCurseur = 5;
     
-    public AxeComponent(){   
+    public AxeComponent(){
+        longueur = 200;
+        distToCenter = 20;
+        orientation = 45;
+        titre = "test";
+        vMax = 100;
+        vMin = 0;
+        value = 75;
+        centre = new Point(250, 250);
+        repaint();
     }
     
     public AxeComponent(Point centre, Integer longueur, Integer distToCenter, Integer orientation, Object[] line){
@@ -69,6 +78,8 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
         repaint();
     }
     
@@ -77,22 +88,19 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
      * @param line 
      */
     public void update(Object[] line){
-          this.titre = (String) line[0];
+        this.titre = (String) line[0];
         this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
-        repaint();
-        
+        repaint();      
     }
-
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         
         Graphics2D g2 = (Graphics2D) g;
-
-                                    
+                                   
         //Positions des extrémités du trait        
         int xDepart = (int) (centre.x + distToCenter*Math.cos(getAngle()));
         int yDepart = (int) (centre.y + distToCenter*Math.sin(getAngle()));
@@ -108,10 +116,10 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         
         //On trace le curseur
         g2.setColor(Color.red);      
-        Point2D.Double centreCurseur = getCentreCurseur();
-        g2.fillOval((int)centreCurseur.x - rayonCurseur, (int)centreCurseur.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        Point2D.Double centreC = getCentreCurseur();
+        g2.fillOval((int)centreC.x - rayonCurseur, (int)centreC.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
         g2.setColor(Color.black);       
-        g2.drawOval((int)centreCurseur.x - rayonCurseur, (int)centreCurseur.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        g2.drawOval((int)centreC.x - rayonCurseur, (int)centreC.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
         
         g2.drawString(titre, xTexte , yTexte);
     }
@@ -133,7 +141,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     
     @Override
     public boolean contains(int x, int y) {        
-        Point2D.Double souris = new Point2D.Double(x, y);              
+        Point2D.Double souris = new Point2D.Double(x, y);    
         return getCentreCurseur().distance(souris) < rayonCurseur;
     }
 

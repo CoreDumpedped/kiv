@@ -31,15 +31,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     private Integer distToCenter;
     //Orientation du trait en degrés
     private Integer orientation;
-    
-    public String getTitre() {
-        return titre;
-    }
 
-    //Valeurs contenues dans le modèle
-    public Integer getValue() {
-        return value;
-    }
     private String titre;
     private Integer vMax;
     private Integer vMin;
@@ -130,8 +122,16 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         return ((double)vMax-(double)vMin)/(double)longueur;
     }
     
+        //Valeurs contenues dans le modèle
+    public Integer getValue() {
+        return Math.round((float)value);
+    }
     private double getAngle(){
         return Math.toRadians(orientation);
+    }
+         
+    public String getTitre() {
+        return titre;
     }
     
     public Point2D.Double getCentreCurseur() {

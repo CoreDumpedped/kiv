@@ -24,7 +24,7 @@ public class Kiviaaat extends JComponent{
             
 
     public Kiviaaat(){
-        
+        listAxe =new ArrayList<AxeComponent>();
     }
     
     public Kiviaaat(TableModel t){
@@ -103,6 +103,15 @@ public class Kiviaaat extends JComponent{
     @Override
     public void paint(Graphics g) {
         super.paint(g);        
+    }
+    
+    @Override
+    public void setBounds(int x, int y, int w, int h) {
+        super.setBounds(x, y, w, h);
+        
+        for (AxeComponent c : listAxe) {
+            c.setBounds(0, 0, w, h);
+        }
     }
 
 }

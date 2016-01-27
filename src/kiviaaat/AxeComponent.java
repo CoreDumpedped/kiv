@@ -151,11 +151,10 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
             alpha *= -1;
         }
         double l = dist * Math.cos(alpha - getAngle());
-        
-        l = (l < distToCenter) ? distToCenter : l;
-        l = (l > distToCenter+longueur) ? distToCenter+longueur : l;
 
-        double newValue = l*getEchelle();
+        double newValue = (l-distToCenter)*getEchelle();
+        newValue = (newValue < vMin) ? vMin : newValue;
+        newValue = (newValue > vMax) ? vMax : newValue;
         return newValue;
     }
     

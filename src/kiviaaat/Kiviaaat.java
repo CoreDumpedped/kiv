@@ -96,8 +96,8 @@ public class Kiviaaat extends JLayeredPane{
         int[] xPoints=new int[listAxe.size()];
         int[] yPoints=new int[listAxe.size()];
         for(AxeComponent a:listAxe){
-             xPoints[i]=a.getxCurseur();
-             yPoints[i]=a.getyCurseur();
+             xPoints[i]= (int)a.getCentreCurseur().x;
+             yPoints[i]= (int)a.getCentreCurseur().y;
              i++;
         }
        

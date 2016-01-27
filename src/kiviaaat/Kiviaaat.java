@@ -91,7 +91,18 @@ public class Kiviaaat extends JLayeredPane{
        
     @Override
     public void paint(Graphics g) {
-        super.paint(g);        
+        super.paint(g);    
+        int i=0;
+        int[] xPoints=new int[listAxe.size()];
+        int[] yPoints=new int[listAxe.size()];
+        for(AxeComponent a:listAxe){
+             xPoints[i]=a.getxCurseur();
+             yPoints[i]=a.getyCurseur();
+             i++;
+        }
+       
+        g.drawPolygon(xPoints, yPoints, listAxe.size());
+        
     }
     
     @Override

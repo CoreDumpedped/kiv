@@ -48,7 +48,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     //Le rayon du curseur
     private Integer rayonCurseur = 5;
     
-    private String etat = "Idle";
+    private boolean dragged = true;
     
     public AxeComponent(){
         longueur = 200;
@@ -82,11 +82,14 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
      * @param line 
      */
     public void update(Object[] line){
-        this.titre = (String) line[0];
-        this.value = (Integer)line[1];
-        this.vMin = (Integer) line[2];
-        this.vMax = (Integer) line[3];
-        repaint();      
+        if(!dragged){
+             this.titre = (String) line[0];
+            this.value = (Integer)line[1];
+            this.vMin = (Integer) line[2];
+            this.vMax = (Integer) line[3];
+            repaint();      
+        }
+    
     }
 
     @Override
@@ -167,38 +170,39 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(titre + " : Clicked");
+     //   System.out.println(titre + " : Clicked");
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        System.out.println(titre + " : Pressed");
+     //   System.out.println(titre + " : Pressed");
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(etat == "Dragging"){
+        if(dragged){
            value = getValueProjection(e.getX(), e.getY());
-           //TODO fonction remi
+            firePropertyNotify();
            repaint();
-           etat= "Idle";
+           dragged=false;
         }      
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println(titre + " : Entered");
+      //  System.out.println(titre + " : Entered");
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        System.out.println(titre + " : Exited");
+     //   System.out.println(titre + " : Exited");
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {      
         value = getValueProjection(e.getX(), e.getY());
-        etat = "Dragging";
+        dragged = true;
+        firePropertyNotify();
         repaint();
     }
 
@@ -215,6 +219,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         * notify des changement les observeur
         */
     public void firePropertyNotify(){
+        System.out.println("notification de changement");
        AxeEvent e= new AxeEvent(this);
             for(AxeListener s: listeListener){
                 s.datachange(e);

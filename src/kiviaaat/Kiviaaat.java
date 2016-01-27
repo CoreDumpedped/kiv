@@ -59,9 +59,8 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
     public void update(TableModelEvent e){
         switch(e.getType()){
             case UPDATE:
-                updateAxe();
-                
-           // break;
+                updateAxe();           
+             break;
             default:
                 majTab();   
            break;     

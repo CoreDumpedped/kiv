@@ -44,7 +44,16 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     //Le rayon du curseur
     private Integer rayonCurseur = 5;
     
-    public AxeComponent(){   
+    public AxeComponent(){
+        longueur = 200;
+        distToCenter = 20;
+        orientation = 45;
+        titre = "test";
+        vMax = 100;
+        vMin = 0;
+        value = 75;
+        centre = new Point(250, 250);
+        repaint();
     }
     
     public AxeComponent(Point centre, Integer longueur, Integer distToCenter, Integer orientation, Object[] line){
@@ -56,6 +65,8 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
         repaint();
     }
     
@@ -64,15 +75,13 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
      * @param line 
      */
     public void update(Object[] line){
-          this.titre = (String) line[0];
+        this.titre = (String) line[0];
         this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
-        repaint();
-        
+        repaint();      
     }
-
-    
+   
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -119,7 +128,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     
     @Override
     public boolean contains(int x, int y) {        
-        Point2D.Double souris = new Point2D.Double(x, y);              
+        Point2D.Double souris = new Point2D.Double(x, y);    
         return getCentreCurseur().distance(souris) < rayonCurseur;
     }
 

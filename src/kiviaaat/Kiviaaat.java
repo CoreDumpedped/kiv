@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import javax.swing.JLayeredPane;
 import javax.swing.event.TableModelEvent;
+import static javax.swing.event.TableModelEvent.UPDATE;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 
@@ -34,7 +35,7 @@ public class Kiviaaat extends JLayeredPane{
          this.model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-              majTab(e);
+              update(e);
             }
         });   
         createAxes();
@@ -45,7 +46,7 @@ public class Kiviaaat extends JLayeredPane{
         this.model.addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
-              majTab(e);
+               update(e);
             }
         });   
         createAxes();
@@ -53,11 +54,25 @@ public class Kiviaaat extends JLayeredPane{
     }
     
     
+    public void update(TableModelEvent e){
+        switch(e.getType()){
+            case UPDATE:
+                updateAxe();
+            break;
+            default:
+                majTab();   
+           break;     
+        }
+    }
+    
+    
+    
+    
     /**
      * réinitialise les axes et les recrée en fonction du model 
      * @param e 
      */
-    public void majTab(TableModelEvent e){
+    public void majTab(){
         System.out.println("MAJ ");
         this.removeAxe();
         createAxes();
@@ -70,6 +85,23 @@ public class Kiviaaat extends JLayeredPane{
             this.remove(a);
         }
     }
+    
+    /**
+     * Demande une mise a jours de tout les axes
+     * en fonction du model
+     */
+    public void updateAxe(){
+        System.out.println("update");
+        int i=0;
+        for(AxeComponent a: listAxe){     
+          Object[] line = RowToObject(i);    
+            a.update(line);
+            i++;
+        }
+        this.repaint();
+    }
+    
+    
     
     /**
      * crée les différents axes en fonction du model de données

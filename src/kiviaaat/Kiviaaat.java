@@ -183,9 +183,10 @@ public class Kiviaaat extends JLayeredPane{
         int i=0;
         int[] xPoints=new int[listAxe.size()];
         int[] yPoints=new int[listAxe.size()];
-        for(AxeComponent a:listAxe){ 
-             xPoints[i]=a.getxCurseur();
-             yPoints[i]=a.getyCurseur();
+
+        for(AxeComponent a:listAxe){
+             xPoints[i]= (int)a.getCentreCurseur().x;
+             yPoints[i]= (int)a.getCentreCurseur().y;
              i++;
         }
         g.drawPolygon(xPoints, yPoints, listAxe.size());     

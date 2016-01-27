@@ -47,7 +47,8 @@ public class Kiviaaat extends JLayeredPane{
        int i;
        int orientation=0;       
        int angle=360/model.getRowCount();
-      ArrayList<AxeComponent> liste =new ArrayList<AxeComponent>();
+        ArrayList<AxeComponent> liste =new ArrayList<AxeComponent>();
+      
        for(i=0;i<model.getRowCount();i++){
            Point p=new Point();
            int l=this.calculeLongueur();

@@ -31,6 +31,25 @@ public class AxeComponent extends JComponent{
     private Integer vMin;
     private Integer value;
     
+    private   int xCurseur=0;
+    private    int yCurseur=0;
+
+    public int getxCurseur() {
+        return xCurseur + rayonCurseur;
+    }
+
+    public void setxCurseur(int xCurseur) {
+        this.xCurseur = xCurseur;
+    }
+
+    public int getyCurseur() {
+        return yCurseur + rayonCurseur;
+    }
+
+    public void setyCurseur(int yCurseur) {
+        this.yCurseur = yCurseur;
+    }
+    
     //Coordonnées du centre du Kiviatt
     private Point centre;
     
@@ -84,8 +103,8 @@ public class AxeComponent extends JComponent{
         int yTexte = (int) (centre.y + (1.5*distToCenter+longueur)*Math.sin(angle)) + 5;
         
         //Position du curseur
-        int xCurseur = (int) (centre.x + (distToCenter+(value-vMin)/echelle)*Math.cos(angle) - rayonCurseur);
-        int yCurseur = (int) (centre.y + (distToCenter+(value-vMin)/echelle)*Math.sin(angle) - rayonCurseur);
+         xCurseur = (int) (centre.x + (distToCenter+(value-vMin)/echelle)*Math.cos(angle) - rayonCurseur);
+         yCurseur = (int) (centre.y + (distToCenter+(value-vMin)/echelle)*Math.sin(angle) - rayonCurseur);
         
         System.out.println("Trait orientation : " + orientation + ", echelle : " + echelle + ", xDepart=" + xDepart + ", yDepart=" + yDepart + ", xCurseur=" + xCurseur + ", yCurseur=" + yCurseur);
           

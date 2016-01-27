@@ -33,7 +33,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     private String titre;
     private Integer vMax;
     private Integer vMin;
-    private Integer value;
+    private double value;
     
     //Le centre du curseur
     private Point2D.Double centreCurseur;
@@ -43,6 +43,8 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     
     //Le rayon du curseur
     private Integer rayonCurseur = 5;
+    
+    private String etat = "Idle";
     
     public AxeComponent(){
         longueur = 200;
@@ -125,6 +127,24 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         return new Point2D.Double(xCentreCurseur, yCentreCurseur);       
     }
 
+    public double getValueProjection(int x, int y){
+
+        double dist = centre.distance(x, y);
+        double cosa = (float) (x - centre.x) / dist;
+        double sina = (float) (y - centre.y) / dist;
+
+        double alpha = (double) Math.acos(cosa);
+        if (sina <= 0) {
+            alpha *= -1;
+        }
+        double l = dist * Math.cos(alpha - getAngle());
+        
+        l = (l < distToCenter) ? distToCenter : l;
+        l = (l > distToCenter+longueur) ? distToCenter+longueur : l;
+
+        double newValue = l*getEchelle();
+        return newValue;
+    }
     
     @Override
     public boolean contains(int x, int y) {        
@@ -144,7 +164,12 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        System.out.println(titre + " : Released");
+        if(etat == "Dragging"){
+           value = getValueProjection(e.getX(), e.getY());
+           //TODO fonction remi
+           repaint();
+           etat= "Idle";
+        }      
     }
 
     @Override
@@ -158,8 +183,10 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
-        System.out.println(titre + " : Dragged");
+    public void mouseDragged(MouseEvent e) {      
+        value = getValueProjection(e.getX(), e.getY());
+        etat = "Dragging";
+        repaint();
     }
 
     @Override

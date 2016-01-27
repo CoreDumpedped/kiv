@@ -21,11 +21,11 @@ public class Test extends javax.swing.JFrame {
          model = new DefaultTableModel();
         String[] name={"Critère","Valeur","Vmin", "Vmax"};
         model.setColumnIdentifiers(name);
-        Object[] row1= {"Force", 5, 1, 10};
-        Object[] row2= {"Intelligence", 18, 1, 20};
-        Object[] row3= {"Agilité", 10, 1, 30};
-        Object[] row4= {"Niveau", 85, 1, 200};
-        Object[] row5= {"Rang", 8, 1, 10};
+        Object[] row1= {"Force", 50, 10, 100};
+        Object[] row2= {"Intelligence", 80, 10, 100};
+        Object[] row3= {"Agilité", 20, 10, 100};
+        Object[] row4= {"Niveau", 85, 10, 100};
+        Object[] row5= {"Rang", 80, 10, 100};
         model.addRow(row1);
         model.addRow(row2);
         model.addRow(row3);

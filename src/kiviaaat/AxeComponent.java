@@ -80,6 +80,9 @@ public class AxeComponent extends JComponent{
         repaint();
     }
     
+    
+
+    
     @Override
     public void paint(Graphics g) {
         super.paint(g);

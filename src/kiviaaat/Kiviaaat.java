@@ -59,9 +59,9 @@ public class Kiviaaat extends JLayeredPane{
      */
     public void majTab(TableModelEvent e){
         System.out.println("MAJ ");
-       this.removeAxe();
+        this.removeAxe();
         createAxes();
-        this.repaint();
+        this.revalidate();
         System.out.println(listAxe.isEmpty());
     }
     
@@ -96,8 +96,6 @@ public class Kiviaaat extends JLayeredPane{
     }
     
    
-    
-    
 
     
     

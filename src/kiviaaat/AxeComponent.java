@@ -80,6 +80,8 @@ public class AxeComponent extends JComponent{
         int yDepart = (int) (centre.y + distToCenter*Math.sin(angle));
         int xFin = (int) (centre.x + (distToCenter+longueur)*Math.cos(angle));
         int yFin = (int) (centre.y + (distToCenter+longueur)*Math.sin(angle));
+        int xTexte = (int) (centre.x + (1.5*distToCenter+longueur)*Math.cos(angle)) - 5;
+        int yTexte = (int) (centre.y + (1.5*distToCenter+longueur)*Math.sin(angle)) + 5;
         
         //Position du curseur
         int xCurseur = (int) (centre.x + (distToCenter+(value-vMin)/echelle)*Math.cos(angle) - rayonCurseur);
@@ -93,10 +95,11 @@ public class AxeComponent extends JComponent{
         g2.drawLine(xDepart, yDepart, xFin, yFin);
         
         //On trace le curseur
-        g2.setColor(Color.red);
+        g2.setColor(Color.red);       
+        g2.fillOval(xCurseur, yCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        g2.setColor(Color.black);       
         g2.drawOval(xCurseur, yCurseur, 2*rayonCurseur, 2*rayonCurseur);
         
-        
-        
+        g2.drawString(titre, xTexte , yTexte);
     }
 }

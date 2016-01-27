@@ -8,9 +8,7 @@ package kiviaaat;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
-import javax.swing.JComponent;
 import javax.swing.JLayeredPane;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -21,7 +19,7 @@ public class Kiviaaat extends JLayeredPane{
  
     private TableModel model;
     private ArrayList<AxeComponent> listAxe;
-    private static int DIST_CENTRE=5; 
+    private static int DIST_CENTRE=20; 
             
 
     public Kiviaaat(){
@@ -31,38 +29,36 @@ public class Kiviaaat extends JLayeredPane{
     
     public Kiviaaat(TableModel t){
         this.model=t;
-        this.listAxe=createAxes();
+        createAxes();
     }
    
     public void setModel(TableModel t){
         this.model=t;
-        this.listAxe=createAxes();
+        createAxes();
         this.repaint();
     }
     /**
      * crée les différents axes en fonction du model de données
      * return une liste axes en fonction du model
      */
-    public ArrayList<AxeComponent> createAxes(){
+    public void createAxes(){
+        System.out.println("CreateAxes");
        int i;
        int orientation=0;       
        int angle=360/model.getRowCount();
-      ArrayList<AxeComponent> liste =new ArrayList<AxeComponent>();
        for(i=0;i<model.getRowCount();i++){
-           Point p=new Point();
+           Point centre = new Point();
            int l=this.calculeLongueur();
-           p.x=this.getSize().height/2;
-           p.y=this.getSize().width/2;
-           Object[] line=RowToObject(i);    
-           AxeComponent a=new AxeComponent(p,l,DIST_CENTRE, orientation, line);
+           centre.x=this.getSize().width/2;
+           centre.y=this.getSize().height/2;
+           Object[] line = RowToObject(i);    
+           AxeComponent a=new AxeComponent(centre, l, DIST_CENTRE, orientation, line);
            this.add(a);
-           liste.add(a);
+           listAxe.add(a);
            orientation+=angle;        
        }
-       return liste;
     }
     
-
    
     /**
      * transforme une ligne du tableModel en object[]
@@ -88,11 +84,9 @@ public class Kiviaaat extends JLayeredPane{
         if(min>this.getSize().width){
             min=this.getSize().width;
         }
-        return (min/2)-DIST_CENTRE;
+        return (min/2)-2*DIST_CENTRE;
     }
-    
-
-    
+       
     @Override
     public void paint(Graphics g) {
         super.paint(g);        

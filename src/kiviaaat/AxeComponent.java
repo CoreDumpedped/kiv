@@ -53,17 +53,21 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         this.distToCenter = distToCenter;
         this.orientation = orientation;
         this.titre = (String) line[0];
-        this.value = (Integer) line[1];
+        this.value = (Integer)line[1];
         this.vMin = (Integer) line[2];
         this.vMax = (Integer) line[3];
         repaint();
     }
+    
+    
+
     
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         
         Graphics2D g2 = (Graphics2D) g;
+
                                     
         //Positions des extrémités du trait        
         int xDepart = (int) (centre.x + distToCenter*Math.cos(getAngle()));
@@ -71,7 +75,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         int xFin = (int) (centre.x + (distToCenter+longueur)*Math.cos(getAngle()));
         int yFin = (int) (centre.y + (distToCenter+longueur)*Math.sin(getAngle()));
         int xTexte = (int) (centre.x + (1.5*distToCenter+longueur)*Math.cos(getAngle())) - 5;
-        int yTexte = (int) (centre.y + (1.5*distToCenter+longueur)*Math.sin(getAngle())) + 5;
+        int yTexte = (int) (centre.y + (1.5*distToCenter+longueur)*Math.sin(getAngle())) + 5;              
           
         //On trace le trait
         g2.setColor(Color.black);

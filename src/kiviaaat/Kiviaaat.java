@@ -20,7 +20,7 @@ import javax.swing.table.TableModel;
  *
  * @author deslanbe
  */
-public class Kiviaaat extends JLayeredPane{
+public class Kiviaaat extends JLayeredPane implements AxeListener{
  
     private TableModel model;
     private ArrayList<AxeComponent> listAxe;
@@ -67,6 +67,7 @@ public class Kiviaaat extends JLayeredPane{
            break;     
         }
     }
+    
     
     
     /**
@@ -124,7 +125,8 @@ public class Kiviaaat extends JLayeredPane{
            AxeComponent a=new AxeComponent(centre, l, DIST_CENTRE, orientation, line);
            this.add(a);
            listAxe.add(a);
-           orientation+=angle;        
+           orientation+=angle; 
+           a.addListener(this);
        }
     }
     
@@ -201,6 +203,23 @@ public class Kiviaaat extends JLayeredPane{
         for (AxeComponent c : listAxe) {
             c.setBounds(0, 0, w, h);
         }
+    }
+
+    /**
+     * change la valeur du model lorsque celui-ci est notifyer par l'axe
+     * @param e 
+     */
+    @Override
+    public void datachange(AxeEvent e) {
+      AxeComponent axe= (AxeComponent) e.getSource();
+      int i;
+      for(i=0;i<model.getRowCount();i++){
+          if(model.getValueAt(i,0).equals(axe.getTitre())){
+                model.setValueAt(axe.getValue(), i,1);
+                break;
+          }
+      }
+    
     }
 
 }

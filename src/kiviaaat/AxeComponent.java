@@ -5,8 +5,10 @@
  */
 package kiviaaat;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import javax.swing.JComponent;
 
@@ -33,7 +35,7 @@ public class AxeComponent extends JComponent{
     private Point centre;
     
     //Le rayon du curseur
-    private Integer rayonCurseur = 3;
+    private Integer rayonCurseur = 5;
     
     public AxeComponent(){
         this.centre = new Point(50, 50);
@@ -63,28 +65,36 @@ public class AxeComponent extends JComponent{
     public void paint(Graphics g) {
         super.paint(g);
         
-        g.setColor(Color.black);       
+        Graphics2D g2 = (Graphics2D) g;
+               
                 
         //La valeur de l'échelle en valeur/unité de longueur
-        double echelle = (vMax-vMin)/longueur;
-        
+        double echelle = ((double)vMax-(double)vMin)/(double)longueur;
+        System.out.println("vMax : " + vMax + ",vMin : " + vMin + ",l : " + longueur);
+        System.out.println("centre X : " + centre.x + "centre Y : " + centre.y);
         //L'angle du trait en radians
         double angle = Math.toRadians(orientation);
         
         //Positions des extrémités du trait        
         int xDepart = (int) (centre.x + distToCenter*Math.cos(angle));
-        int yDepart = (int) (centre.x + distToCenter*Math.sin(angle));
+        int yDepart = (int) (centre.y + distToCenter*Math.sin(angle));
         int xFin = (int) (centre.x + (distToCenter+longueur)*Math.cos(angle));
-        int yFin = (int) (centre.x + (distToCenter+longueur)*Math.cos(angle));
+        int yFin = (int) (centre.y + (distToCenter+longueur)*Math.sin(angle));
         
         //Position du curseur
-        int xCurseur = (int) (centre.x - rayonCurseur + (distToCenter+(value-vMin)/echelle)*Math.cos(angle));
-        int yCurseur = (int) (centre.x - rayonCurseur + (distToCenter+(value-vMin)/echelle)*Math.sin(angle));
+        int xCurseur = (int) (centre.x + (distToCenter+(value-vMin)/echelle)*Math.cos(angle) - rayonCurseur);
+        int yCurseur = (int) (centre.y + (distToCenter+(value-vMin)/echelle)*Math.sin(angle) - rayonCurseur);
         
+        System.out.println("Trait orientation : " + orientation + ", echelle : " + echelle + ", xDepart=" + xDepart + ", yDepart=" + yDepart + ", xCurseur=" + xCurseur + ", yCurseur=" + yCurseur);
+          
         //On trace le trait
-        g.drawLine(xDepart, yDepart, xFin, yFin);
+        g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(2));
+        g2.drawLine(xDepart, yDepart, xFin, yFin);
+        
         //On trace le curseur
-        g.fillOval(xCurseur, yCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        g2.setColor(Color.red);
+        g2.drawOval(xCurseur, yCurseur, 2*rayonCurseur, 2*rayonCurseur);
         
         
         

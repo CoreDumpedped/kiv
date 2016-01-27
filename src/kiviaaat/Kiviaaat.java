@@ -12,6 +12,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.event.TableModelEvent;
 import static javax.swing.event.TableModelEvent.UPDATE;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 /**
@@ -58,14 +59,13 @@ public class Kiviaaat extends JLayeredPane{
         switch(e.getType()){
             case UPDATE:
                 updateAxe();
-            break;
+                
+           // break;
             default:
                 majTab();   
            break;     
         }
     }
-    
-    
     
     
     /**

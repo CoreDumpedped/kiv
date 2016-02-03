@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLayeredPane;
 import javax.swing.event.TableModelEvent;
 import static javax.swing.event.TableModelEvent.UPDATE;
@@ -33,17 +35,17 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
     }
     
     public Kiviaaat(TableModel t){
-        this.model=t;
-         this.model.addTableModelListener(new TableModelListener() {
-            @Override
-            public void tableChanged(TableModelEvent e) {
-              update(e);
-            }
-        });   
+        this.setModel(t);
         createAxes();
     }
    
-    public void setModel(TableModel t){
+    public void setModel(TableModel t) {
+    
+        try {
+            testTableModel(t);
+        } catch (TableModelException ex) {
+            Logger.getLogger(Kiviaaat.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.model=t;
         this.model.addTableModelListener(new TableModelListener() {
             @Override
@@ -52,9 +54,36 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
             }
         });   
         createAxes();
-        this.repaint();
+        this.repaint(); 
+            
     }
     
+    /**
+     * test si le tableModel est conforme
+     * @param e 
+     */
+    
+    public void testTableModel(TableModel t) throws TableModelException {
+        int i;
+        if (t.getColumnCount() != 4) {
+            throw new TableModelException("nombre de colonne incorrect");
+        }
+        try {
+            for (i = 0; i < t.getRowCount(); i++) {
+                Object[] line = RowToObject(i, t);
+                if((int)line[2]>(int)line[3]){
+                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 3em colonne doivent etre inferieure a celle de la 4em");
+                }
+                if((int)line[1]<(int)line[2] || (int)line[1]>(int)line[3]){
+                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 2em colonne doivent etre situé entre celle de la 3em et 4em colonne");
+                }
+            }
+        } catch (NumberFormatException e) {
+            throw new TableModelException("Valeurs de la 2em colonne incorrect");
+        }
+        
+    }
+
     
     public void update(TableModelEvent e){
         switch(e.getType()){
@@ -143,17 +172,35 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
            line[0]=model.getValueAt(indice,0);
            line[2]=model.getValueAt(indice,2);
            line[3]=model.getValueAt(indice,3);
-                      if(model.getValueAt(indice,1) instanceof String){
+          if(model.getValueAt(indice,1) instanceof String){
                    line[1]=Integer.parseInt((String) model.getValueAt(indice,1));
            }else{
                  line[1]=model.getValueAt(indice,1);
            }
-           
-           
-           
-           
            return line;
     }
+    
+    
+    
+        /**
+     * transforme une ligne du tableModel en object[]
+     * @param indice de la ligne
+     * @return tableau d'objet
+     */
+    public Object[] RowToObject(int indice,TableModel t){
+           Object[] line=new Object[4];
+           line[0]=t.getValueAt(indice,0);
+           line[2]=t.getValueAt(indice,2);
+           line[3]=t.getValueAt(indice,3);
+          if(t.getValueAt(indice,1) instanceof String){
+                   line[1]=Integer.parseInt((String) t.getValueAt(indice,1));
+           }else{
+                 line[1]=t.getValueAt(indice,1);
+           }
+           return line;
+    }
+    
+    
     
     /**
      * calcule la longueur d'un trait 

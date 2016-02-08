@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package kiviaaat;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,32 +11,35 @@ import javax.swing.JLayeredPane;
 import javax.swing.event.TableModelEvent;
 import static javax.swing.event.TableModelEvent.UPDATE;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-/**
- *
- * @author deslanbe
- */
 public class Kiviaaat extends JLayeredPane implements AxeListener{
  
     private TableModel model;
     private ArrayList<AxeComponent> listAxe;
     private static int DIST_CENTRE=20; 
-            
-
+    
+    ///////////////////
+    // Constructeurs //
+    ///////////////////
+    
     public Kiviaaat(){
         listAxe =new ArrayList<AxeComponent>();
         model=null;
-    }
-    
+    }   
     public Kiviaaat(TableModel t){
         this.setModel(t);
-        createAxes();
     }
-   
-    public void setModel(TableModel t) {
     
+    ///////////////////////
+    // Gestion du modèle //
+    ///////////////////////
+    
+    /**
+     * Initialise le Kiviatt avec un nouveau modèle
+     * @param t, le nouveau modèle 
+     */
+    public void setModel(TableModel t) {   
         try {
             testTableModel(t);
         } catch (TableModelException ex) {
@@ -54,140 +53,79 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
             }
         });   
         createAxes();
-        this.repaint(); 
-            
+        this.repaint();             
     }
     
     /**
-     * test si le tableModel est conforme
+     * Teste si le tableModel est conforme, renvoie des exceptions sinon.
      * @param e 
-     */
-    
-    public void testTableModel(TableModel t) throws TableModelException {
+     */   
+    private void testTableModel(TableModel t) throws TableModelException {
         int i;
         if (t.getColumnCount() != 4) {
-            throw new TableModelException("nombre de colonne incorrect");
+            throw new TableModelException("Nombre de colonnes incorrect. Il doit y en avoir 4 : Nom, valeur, valeurMin et valeurMax.");
         }
         try {
             for (i = 0; i < t.getRowCount(); i++) {
                 Object[] line = RowToObject(i, t);
                 if((int)line[2]>(int)line[3]){
-                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 3em colonne doivent etre inferieure a celle de la 4em");
+                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 3e colonne doivent être inferieures a celles de la 4e");
                 }
                 if((int)line[1]<(int)line[2] || (int)line[1]>(int)line[3]){
-                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 2em colonne doivent etre situé entre celle de la 3em et 4em colonne");
+                     throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 2e colonne doivent être situées entre celles de la 3e et 4e colonne");
                 }
             }
         } catch (NumberFormatException e) {
-            throw new TableModelException("Valeurs de la 2em colonne incorrect");
+            throw new TableModelException("Valeurs de la 2e colonne incorrectes");
         }
         
     }
 
-    
-    public void update(TableModelEvent e){
+    /**
+     * Handler pour l'évènement TableModelEvent
+     * @param e 
+     */
+    private void update(TableModelEvent e){
         switch(e.getType()){
             case UPDATE:
                 updateAxe();           
-             break;
+                break;
             default:
                 majTab();   
-           break;     
+                break;     
         }
-    }
+    }   
     
-    
-    
-    /**
-     * réinitialise les axes et les recrée en fonction du model 
-     * @param e 
-     */
-    public void majTab(){
-        System.out.println("MAJ ");
-        this.removeAxe();
-        createAxes();
-        this.revalidate();
-        System.out.println(listAxe.isEmpty());
-    }
-    
-    public void removeAxe(){
-        for(AxeComponent a:listAxe){
-            this.remove(a);
-        }
-    }
+    /////////////////
+    // Utilitaires //
+    /////////////////
     
     /**
-     * Demande une mise a jours de tout les axes
-     * en fonction du model
-     */
-    public void updateAxe(){
-        System.out.println("update");
-        int i=0;
-        for(AxeComponent a: listAxe){     
-          Object[] line = RowToObject(i);    
-            a.update(line);
-            i++;
-        }
-        this.repaint();
-    }
-    
-    
-    
-    /**
-     * crée les différents axes en fonction du model de données
-     * 
-     */
-    public void createAxes(){
-        System.out.println("CreateAxes");
-       int i;
-       int orientation=0;       
-       int angle=360/model.getRowCount();
-       listAxe =new ArrayList<AxeComponent>();
-
-       for(i=0;i<model.getRowCount();i++){
-           Point centre = new Point();
-           int l=this.calculeLongueur();
-           centre.x=this.getSize().width/2;
-           centre.y=this.getSize().height/2;
-           Object[] line = RowToObject(i);    
-           AxeComponent a=new AxeComponent(centre, l, DIST_CENTRE, orientation, line);
-           this.add(a);
-           listAxe.add(a);
-           orientation+=angle; 
-           a.addListener(this);
-       }
-    }
-    
-   
-
-    
-    
-    /**
-     * transforme une ligne du tableModel en object[]
+     * Transforme une ligne du tableModel en object[]
      * @param indice de la ligne
      * @return tableau d'objet
      */
-    public Object[] RowToObject(int indice){
+    private Object[] RowToObject(int indice){
            Object[] line=new Object[4];
            line[0]=model.getValueAt(indice,0);
            line[2]=model.getValueAt(indice,2);
            line[3]=model.getValueAt(indice,3);
-          if(model.getValueAt(indice,1) instanceof String){
-                   line[1]=Integer.parseInt((String) model.getValueAt(indice,1));
-           }else{
-                 line[1]=model.getValueAt(indice,1);
+           if(model.getValueAt(indice,1) instanceof String){
+                line[1]=Integer.parseInt((String) model.getValueAt(indice,1));
+           }
+           else{
+                line[1]=model.getValueAt(indice,1);
            }
            return line;
     }
     
-    
-    
-        /**
-     * transforme une ligne du tableModel en object[]
+     /**
+     * Transforme une ligne du tableModel en object[]
      * @param indice de la ligne
-     * @return tableau d'objet
+     * @param t, la table à exploiter
+     * @return un tableau d'objet
      */
-    public Object[] RowToObject(int indice,TableModel t){
+    private Object[] RowToObject(int indice,TableModel t){
            Object[] line=new Object[4];
            line[0]=t.getValueAt(indice,0);
            line[2]=t.getValueAt(indice,2);
@@ -199,36 +137,130 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
            }
            return line;
     }
-    
-    
-    
+     
     /**
-     * calcule la longueur d'un trait 
-     * en fonction de la taille de la fenetre
+     * Calcule la longueur des axes en fonction de la taille de la fenetre
      * @return la longueur
      */
-    public int calculeLongueur(){
+    private int calculeLongueur(){
         int min=this.getSize().height;
         if(min>this.getSize().width){
             min=this.getSize().width;
         }
         return (min/2)-2*DIST_CENTRE;
     }
-       
-    @Override
-    public void paint(Graphics g) {
-        this.drawFond(g);
-        this.drawPolyagon(g);       
-        super.paint(g);           
-    }
-    
+     
+    ////////////////////////////////
+    // Gestion des composants Axe //
+    ////////////////////////////////
     
     /**
-     * calcule et dessine le polygone
-     * qui relie les curseur entre eux
+     * Supprime tous les axes du layout
+     */
+    private void removeAxe(){
+        for(AxeComponent a:listAxe){
+            this.remove(a);
+        }
+    }
+    
+    /**
+     * Mets à jour tous les axes
+     */
+    private void updateAxe(){
+        int i=0;
+        for(AxeComponent a: listAxe){     
+            Object[] line = RowToObject(i);    
+            a.update(line);
+            i++;
+        }
+        this.repaint();
+    }
+    
+    /**
+     * Crée les différents axes en fonction du model de données
+     * 
+     */
+    private void createAxes(){
+        int orientation=0;       
+        int angle=360/model.getRowCount();
+        listAxe =new ArrayList<AxeComponent>();
+
+        Point centre = new Point();
+        int l=this.calculeLongueur();
+        centre.x=this.getSize().width/2;
+        centre.y=this.getSize().height/2;
+       
+       for(int i=0;i<model.getRowCount();i++){          
+           Object[] line = RowToObject(i);    
+           AxeComponent a=new AxeComponent(centre, l, DIST_CENTRE, orientation, line);
+           this.add(a);
+           listAxe.add(a);
+           orientation+=angle; 
+           a.addListener(this);
+       }
+    }
+    
+    /**
+     * Réinitialise les axes et les recrée en fonction du model 
+     */
+    private void majTab(){
+        this.removeAxe();
+        createAxes();
+        this.revalidate();
+    }
+    
+    ////////////////////////
+    // Méthodes de dessin //   
+    ////////////////////////
+    
+    /**
+     * Dessine le fond en polygones
      * @param g 
      */
-    public void drawPolyagon(Graphics g){
+    private void drawDecoPolygone(Graphics g){       
+        int orientation=0;       
+        double angle=360/model.getRowCount();
+        Point centre = new Point();
+        int l=this.calculeLongueur();
+        centre.x=this.getSize().width/2;
+        centre.y=this.getSize().height/2;
+        for(double j=0;j<11;j++){ 
+            orientation = 0;
+            Polygon p = new Polygon();            
+            for(int i=0;i<model.getRowCount()+1;i++){
+                double x = (centre.x + (DIST_CENTRE+(j/10)*l)*Math.cos(Math.toRadians(orientation)));
+                double y = (centre.y + (DIST_CENTRE+(j/10)*l)*Math.sin(Math.toRadians(orientation)));
+                
+                p.addPoint((int)x, (int)y);              
+                orientation+=angle; 
+           }             
+                g.setColor(Color.gray);
+                g.drawPolygon(p);
+        }
+    }
+    
+    /**
+     * Dessine le fond en cercles
+     * @param g 
+     */
+    private void drawDecoCercle(Graphics g){       
+        int orientation=0;       
+        double angle=360/model.getRowCount();
+        Point centre = new Point();
+        int l=this.calculeLongueur();
+        centre.x=this.getSize().width/2;
+        centre.y=this.getSize().height/2;
+        for(double j=0;j<11;j++){                         
+            g.setColor(Color.gray);
+            g.drawOval((int) (centre.x - ((DIST_CENTRE + (j/10)*l))), (int) (centre.y - ((DIST_CENTRE + (j/10)*l))), (int) (2*(DIST_CENTRE + (j/10)*l)), (int) (2*(DIST_CENTRE + (j/10)*l)));
+        }
+    }
+    
+    /**
+     * Dessine le polygone qui relie les curseurs entre eux
+     * @param g 
+     */
+    private void drawPolygon(Graphics g){
         int i=0;
         int[] xPoints=new int[listAxe.size()];
         int[] yPoints=new int[listAxe.size()];
@@ -240,13 +272,22 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
         }
         g.setColor(Color.black);
         g.drawPolygon(xPoints, yPoints, listAxe.size());          
-        g.setColor(new Color((float) 0.5, 0, (float) 0.2, (float) 0.1));
+        g.setColor(new Color((float) 0.7, 0, (float) 0.4, (float) 0.3));
         g.fillPolygon(xPoints, yPoints, listAxe.size());     
+    }    
+    
+    //////////////////////////
+    // Méthodes surchargées //
+    //////////////////////////
+    
+    @Override
+    public void paint(Graphics g) {
+        this.drawPolygon(g);  
+        //this.drawDecoPolygone(g);
+        this.drawDecoCercle(g);
+        super.paint(g);           
     }
     
-    public void drawFond(Graphics g){
-        
-    }
     @Override
     public void setBounds(int x, int y, int w, int h) {
         super.setBounds(x, y, w, h);
@@ -256,7 +297,7 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
     }
 
     /**
-     * change la valeur du model lorsque celui-ci est notifyer par l'axe
+     * Change la valeur du model lorsque celui-ci est notifié par l'axe
      * @param e 
      */
     @Override

@@ -114,9 +114,9 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         //On trace le curseur
         g2.setColor(Color.red);      
         Point2D.Double centreC = getCentreCurseur();
-        g2.fillOval((int)centreC.x - rayonCurseur, (int)centreC.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        g2.fillOval((int) Math.round(centreC.x - rayonCurseur), (int) Math.round(centreC.y - rayonCurseur), 2*rayonCurseur, 2*rayonCurseur);
         g2.setColor(Color.black);       
-        g2.drawOval((int)centreC.x - rayonCurseur, (int)centreC.y - rayonCurseur, 2*rayonCurseur, 2*rayonCurseur);
+        g2.drawOval((int) Math.round(centreC.x - rayonCurseur), (int) Math.round(centreC.y - rayonCurseur), 2*rayonCurseur, 2*rayonCurseur);
         
         g2.drawString(titre, xTexte , yTexte);
     }
@@ -131,15 +131,14 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     }
     private double getAngle(){
         return Math.toRadians(orientation);
-    }
-         
+    }        
     public String getTitre() {
         return titre;
     }
     
     public Point2D.Double getCentreCurseur() {
-        int xCentreCurseur = (int) (centre.x + (distToCenter+(value-vMin)/getEchelle())*Math.cos(getAngle()));
-        int yCentreCurseur = (int) (centre.y + (distToCenter+(value-vMin)/getEchelle())*Math.sin(getAngle()));
+        double xCentreCurseur = (centre.x + (distToCenter+(value-vMin)/getEchelle())*Math.cos(getAngle()));
+        double yCentreCurseur = (centre.y + (distToCenter+(value-vMin)/getEchelle())*Math.sin(getAngle()));
         return new Point2D.Double(xCentreCurseur, yCentreCurseur);       
     }
 
@@ -181,7 +180,7 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     public void mouseReleased(MouseEvent e) {
         if(dragged){
            value = getValueProjection(e.getX(), e.getY());
-            firePropertyNotify();
+           firePropertyNotify();
            repaint();
            dragged=false;
         }      
@@ -201,13 +200,13 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     public void mouseDragged(MouseEvent e) {      
         value = getValueProjection(e.getX(), e.getY());
         dragged = true;
-        firePropertyNotify();
+        //firePropertyNotify();
         repaint();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        System.out.println(titre + " : Moved");
+        //System.out.println(titre + " : Moved");
     }
     
     
@@ -218,8 +217,8 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
         * notify des changement les observeur
         */
     public void firePropertyNotify(){
-        System.out.println("notification de changement");
-       AxeEvent e= new AxeEvent(this);
+        //System.out.println("notification de changement");
+        AxeEvent e= new AxeEvent(this);
             for(AxeListener s: listeListener){
                 s.datachange(e);
             } 

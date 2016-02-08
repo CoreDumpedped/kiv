@@ -170,7 +170,8 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
        
     @Override
     public void paint(Graphics g) {
-        this.drawPolyagon(g);
+        this.drawFond(g);
+        this.drawPolyagon(g);       
         super.paint(g);           
     }
     
@@ -196,6 +197,9 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
         g.fillPolygon(xPoints, yPoints, listAxe.size());     
     }
     
+    public void drawFond(Graphics g){
+        
+    }
     @Override
     public void setBounds(int x, int y, int w, int h) {
         super.setBounds(x, y, w, h);

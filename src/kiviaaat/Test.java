@@ -22,9 +22,9 @@ public class Test extends javax.swing.JFrame {
         String[] name={"Critère","Valeur","Vmin", "Vmax"};
         model.setColumnIdentifiers(name);
         Object[] row1= {"Force", 5, 1, 100};
-        Object[] row2= {"Intelligence", 8, 1, 100};
+        Object[] row2= {"Intelligence", 2, 5, 100};
         Object[] row3= {"Agilité", 2, 1, 10};
-        Object[] row4= {"Niveau", 85, 100, 10000};
+        Object[] row4= {"Niveau", 85, 100, 1000};
         Object[] row5= {"Rang", 80, 10, 100};
         model.addRow(row1);
         model.addRow(row2);

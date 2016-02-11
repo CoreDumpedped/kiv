@@ -1,5 +1,6 @@
 package kiviaaat;
 
+import static com.sun.org.apache.bcel.internal.Repository.instanceOf;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -84,9 +85,31 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     public void update(Object[] line){
         if(!dragged){
             this.titre = (String) line[0];
-            this.value = (Integer)line[1];
+          /*  this.value = (Integer)line[1];
             this.vMin = (Integer) line[2];
             this.vMax = (Integer) line[3];
+           */ 
+       try{
+            if(line[1] instanceof String){
+              this.value = Integer.parseInt((String) line[1]);  
+            }else{
+                 this.value = (Integer)line[1];
+            }
+            if(line[2] instanceof String){
+              this.vMin = Integer.parseInt((String) line[2]);  
+            }else{
+                this.vMin = (Integer) line[2];  
+            }
+            
+            if(line[3] instanceof String){
+              this.vMax = Integer.parseInt((String) line[3]);  
+            }else{
+                   this.vMax = (Integer) line[3];
+            }
+       }catch(NumberFormatException e){
+           System.err.println("Il faut saisir des valeurs numérique");
+       }
+            
             repaint();      
         }
     } 

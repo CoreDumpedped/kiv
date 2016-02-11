@@ -178,7 +178,6 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
     
     /**
      * Crée les différents axes en fonction du model de données
-     * 
      */
     private void createAxes(){
         int orientation=0;       
@@ -283,8 +282,8 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
     @Override
     public void paint(Graphics g) {
         this.drawPolygon(g);  
-        //this.drawDecoPolygone(g);
-        this.drawDecoCercle(g);
+        this.drawDecoPolygone(g);
+        //this.drawDecoCercle(g);
         super.paint(g);           
     }
     
@@ -309,8 +308,7 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
                 model.setValueAt(axe.getValue(), i,1);
                 break;
           }
-      }
-    
+      }    
     }
 
 }

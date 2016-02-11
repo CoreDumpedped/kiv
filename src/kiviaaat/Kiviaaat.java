@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
+import static java.lang.System.exit;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +45,7 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
             testTableModel(t);
         } catch (TableModelException ex) {
             Logger.getLogger(Kiviaaat.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(0);
         }
         this.model=t;
         this.model.addTableModelListener(new TableModelListener() {
@@ -62,6 +64,8 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
      */   
     private void testTableModel(TableModel t) throws TableModelException {
         int i;
+        System.out.println("test table");
+        String valeurAxe[];
         if (t.getColumnCount() != 4) {
             throw new TableModelException("Nombre de colonnes incorrect. Il doit y en avoir 4 : Nom, valeur, valeurMin et valeurMax.");
         }
@@ -74,11 +78,30 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
                 if((int)line[1]<(int)line[2] || (int)line[1]>(int)line[3]){
                      throw new TableModelException("[LIGNE " + (i+1) + "]" + "Les valeurs de la 2e colonne doivent être situées entre celles de la 3e et 4e colonne");
                 }
+                
             }
+          if(verifNomVariable(t)){
+              throw new TableModelException("[ERREUR] Plusieur variable on le même nom"); 
+          }
         } catch (NumberFormatException e) {
             throw new TableModelException("Valeurs de la 2e colonne incorrectes");
         }
         
+    }
+    
+    private boolean verifNomVariable(TableModel t){
+        System.out.println("verif nom");
+        int i,j;
+        for (i = 0; i < t.getRowCount(); i++) {
+            for (j = i+1; j < t.getRowCount(); j++) {
+                 Object[] line1 = RowToObject(i, t);
+                 Object[] line2 = RowToObject(j, t);
+                 if(line1[0].equals(line2[0])){
+                     return true;
+                 }
+            }
+        }
+        return false;
     }
 
     /**
@@ -91,8 +114,17 @@ public class Kiviaaat extends JLayeredPane implements AxeListener{
                 updateAxe();           
                 break;
             default:
-                majTab();   
-                break;     
+        {
+            try {
+                testTableModel(model);
+                majTab();  
+            } catch (TableModelException ex) {
+                Logger.getLogger(Kiviaaat.class.getName()).log(Level.SEVERE, null, ex);
+                break;
+            }
+        }
+                
+                break;          
         }
     }   
     

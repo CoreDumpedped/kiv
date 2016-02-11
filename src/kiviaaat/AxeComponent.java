@@ -272,7 +272,6 @@ public class AxeComponent extends JComponent implements MouseListener, MouseMoti
     public void mouseDragged(MouseEvent e) {      
         value = getValueProjection(e.getX(), e.getY());
         dragged = true;
-        //firePropertyNotify();
         repaint();
     }
 

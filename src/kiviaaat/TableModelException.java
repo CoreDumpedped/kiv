@@ -1,5 +1,7 @@
 package kiviaaat;
 
+import static java.lang.System.exit;
+
 public class TableModelException extends Exception {
 
     public TableModelException(){
